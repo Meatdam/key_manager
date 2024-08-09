@@ -1,0 +1,7 @@
+tortoise-orm[asyncpg]
+fastapi
+uvicorn
+python-dotenv
+aerich
+cryptography
+
