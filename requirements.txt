@@ -5,3 +5,11 @@ cryptography
 pydantic
 sqlalchemy
 psycopg2-binary
+passlib
+email-validator
+passlib[bcrypt]
+python-jose[cryptography]
+sqlmodel
+pyjwt
+bcrypt
+pytest
