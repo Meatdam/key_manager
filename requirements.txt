@@ -13,3 +13,4 @@ sqlmodel
 pyjwt
 bcrypt
 pytest
+flake8
