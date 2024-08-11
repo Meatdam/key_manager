@@ -1,4 +1,3 @@
-from passlib.context import CryptContext
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.exc import IntegrityError
@@ -21,7 +20,7 @@ async def create_user(user: UserCreateSchema, db: AsyncSession) -> str:
         return db_user
     except IntegrityError as error:
         await db.rollback()
-        raise HTTPException(status_code=409, detail='Пользователь с таким email уже существует')
+        raise HTTPException(status_code=409, detail=f'Пользователь с таким email уже существует {error}')
 
 
 async def update_user(user_id: int, current_id: int, user: UserUpdateSchema, db: AsyncSession) -> UserOut:
@@ -33,6 +32,7 @@ async def update_user(user_id: int, current_id: int, user: UserUpdateSchema, db:
     :param db: экземпляр сессии базы данных (типа AsyncSession)
     :return: обновленный пользователь (типа UserOut)
     """
+    from authentication.auth_services import hash_password
     query = await db.execute(select(User).where(User.id == user_id))
     db_user = query.scalars().first()
 
@@ -49,7 +49,7 @@ async def update_user(user_id: int, current_id: int, user: UserUpdateSchema, db:
 async def get_user_id(user_id: int, db: AsyncSession) -> UserOut:
     """
     Получает данные о пользователе по его идентификатору.
-    :param user_id: идентификатор пользователя (типа int)
+    :param user_id: Идентификатор пользователя (типа int)
     :param db: экземпляр сессии базы данных (типа AsyncSession)
     :return: данные о пользователе (типа UserOut)
     """

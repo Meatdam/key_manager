@@ -35,7 +35,7 @@ def create_access_token(data: dict, expires_delta: timedelta = None) -> str:
         encoded_jwt = jwt.encode(to_encode, os.getenv('SECRET_KEY'), algorithm=os.getenv('ALGORITHM'))
         return encoded_jwt
     except Exception as error:
-        raise HTTPException(status_code=500, detail='Ошибка при создании токена')
+        raise HTTPException(status_code=500, detail=f'Ошибка при создании токена{error}')
 
 
 def create_refresh_token(data: dict, expires_delta: timedelta = None) -> str:
@@ -52,7 +52,7 @@ def create_refresh_token(data: dict, expires_delta: timedelta = None) -> str:
         encoded_jwt = jwt.encode(to_encode, os.getenv('SECRET_KEY'), algorithm=os.getenv('ALGORITHM'))
         return encoded_jwt
     except Exception as error:
-        raise HTTPException(status_code=500, detail='Ошибка при создании токена')
+        raise HTTPException(status_code=500, detail=f'Ошибка при создании токена {error}')
 
 
 def verify_password(plain_password, hashed_password) -> bool:

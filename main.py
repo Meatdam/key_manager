@@ -7,7 +7,6 @@ from users import user_routers
 
 app = FastAPI(title="key_manager", version="0.1.0")
 
-
 app.include_router(user_routers.router)
 app.include_router(cipher_routers.router)
 app.include_router(auth_routers.router)
