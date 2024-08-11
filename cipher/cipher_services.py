@@ -66,8 +66,8 @@ async def decrypt_cipher(url: str, pass_phrase: str, db: AsyncSession):
         f = Fernet(key_bytes)
         decrypted = f.decrypt(phrase_cut_bytes)
         phrase_encode = decrypted.decode(encoding='utf-8')
-    except Exception as e:
-        raise HTTPException(status_code=403, detail='Ошибка при расшифровке или ссылка не действительна')
+    except Exception as error:
+        raise HTTPException(status_code=403, detail=f'Ошибка при расшифровке или ссылка не действительна{error}')
 
     if phrase_encode.lower() == pass_phrase.lower():
         try:
@@ -79,8 +79,8 @@ async def decrypt_cipher(url: str, pass_phrase: str, db: AsyncSession):
             await db.commit()
 
             return encode_cipher_message
-        except Exception as e:
-            return {'message': 'Ошибка при расшифровке'}
+        except Exception as error:
+            return {'message': f'Ошибка при расшифровке{error}'}
 
     elif phrase_encode.lower() != pass_phrase.lower():
         raise HTTPException(status_code=403, detail='Неверное проверочное слово')
