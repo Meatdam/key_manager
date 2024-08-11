@@ -73,5 +73,3 @@ async def delete_user(user_id: int, db: AsyncSession = Depends(get_db),
     """
 
     return await crud.delete_user(user_id, current_user.id, db)
-
-
