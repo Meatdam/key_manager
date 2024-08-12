@@ -1,34 +1,60 @@
 import os
-
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy.ext.declarative import DeclarativeMeta
+from datetime import datetime
+from typing import AsyncGenerator
 
 from dotenv import load_dotenv
+from fastapi import Depends
+from sqlalchemy import Integer, Column, String, TIMESTAMP, ForeignKey, Enum as EnumType
 
+from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
+from sqlalchemy.ext.declarative import DeclarativeMeta, declarative_base
+from sqlalchemy.orm import sessionmaker
+
+from models.models import user
 
 load_dotenv()
 
-engine = create_async_engine(os.getenv('DATABASE_URL'), echo=True)
-AsyncSessionLocal = sessionmaker(bind=engine, class_=AsyncSession, expire_on_commit=False, autoflush=False)
+DATABASE_URL = os.getenv('DATABASE_URL')
+
 Base: DeclarativeMeta = declarative_base()
 
-
-async def create_tables():
-    """
-    Создает все необходимые таблицы в БД
-    """
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
+engine = create_async_engine(DATABASE_URL, echo=True)
+async_session_maker = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
 
 
-async def get_db() -> AsyncSession:
-    """
-    Возвращает сессию для работы с БД
-    """
-    async with AsyncSessionLocal() as session:
-        try:
-            yield session
-        finally:
-            await session.close()
+from enum import Enum
+
+
+class LifeCipher(str, Enum):
+    one_hour = '1 час'
+    one_day = '1 день'
+    seven_days = '7 дней'
+
+
+class User(Base):
+    __tablename__ = 'user'
+    id = Column(Integer, primary_key=True, index=True)
+    email = Column(String, unique=True)
+    register_date = Column(TIMESTAMP, default=datetime.utcnow)
+    password = Column(String, nullable=False)
+
+
+class Cipher(Base):
+    __tablename__ = 'cipher'
+    id = Column(Integer, primary_key=True, index=True)
+    cipher_message = Column(String, nullable=False)
+    key_cipher = Column(String, nullable=False)
+    pass_phrase = Column(String, nullable=True)
+    url = Column(String, nullable=False)
+    user_id = Column(Integer, ForeignKey(user.c.id))
+    life_cipher = Column(EnumType(LifeCipher), nullable=True)
+    create_date = Column(TIMESTAMP, default=datetime.utcnow)
+
+
+async def get_db() -> AsyncGenerator[AsyncSession, None]:
+    async with async_session_maker() as session:
+        yield session
+
+
+async def get_user_db(session: AsyncSession = Depends(get_db)):
+    yield session
