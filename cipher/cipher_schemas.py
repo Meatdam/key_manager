@@ -1,5 +1,9 @@
+from typing import Optional
+
 from fastapi import HTTPException
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
+
+from database.db import LifeCipher
 
 
 class CipherMessageSchema(BaseModel):
@@ -8,6 +12,7 @@ class CipherMessageSchema(BaseModel):
     """
     cipher_message: str
     pass_phrase: str
+    life_cipher: Optional[LifeCipher] = Field(None)
 
 
 class EncodingSchema(BaseModel):
