@@ -6,7 +6,7 @@ from users import users_services as crud
 
 from database.db import get_db
 from authentication.auth_services import get_current_user
-from users.users_models import User
+from database.db import User
 from users.users_schemas import UserCreateSchema, UserOut, UserUpdateSchema
 from users.users_services import create_user, get_user_by_email
 
