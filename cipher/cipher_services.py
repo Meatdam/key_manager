@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from fastapi import HTTPException
 
-from cipher.cipher_models import MessageCipher
+from database.db import Cipher
 from cipher.cipher_schemas import CipherMessageSchema
 
 
@@ -20,8 +20,9 @@ async def create_cipher(message: CipherMessageSchema, user_id: int, db: AsyncSes
     pass_phrase = message.pass_phrase
     cipher_phrase = fernet.encrypt(pass_phrase.encode())
 
-    load_data = MessageCipher(key_cipher=str(key), cipher_message=str(cipher_message), pass_phrase=str(cipher_phrase),
-                              user_id=user_id, url=f"http://127.0.0.1:8000/key/{cipher_message}")
+    load_data = Cipher(key_cipher=str(key), cipher_message=str(cipher_message), pass_phrase=str(cipher_phrase),
+                       user_id=user_id, url=f"http://127.0.0.1:8000/key/{cipher_message}",
+                       life_cipher=message.life_cipher)
     db.add(load_data)
     await db.commit()
     await db.refresh(load_data)
@@ -32,17 +33,17 @@ async def get_cipher_list(current_id: int, db: AsyncSession):
     """
     Получить список зашифрованных сообщений
     """
-    query = await db.execute(select(MessageCipher).where(MessageCipher.user_id == current_id))
+    query = await db.execute(select(Cipher).where(Cipher.user_id == current_id))
     db_message = query.scalars().all()
 
     return db_message
 
 
-async def get_cipher_by_id(id_message: int, current_id: int, db: AsyncSession) -> MessageCipher:
+async def get_cipher_by_id(id_message: int, current_id: int, db: AsyncSession) -> Cipher:
     """
     Получить зашифрованное сообщение по его id
     """
-    query = await db.execute(select(MessageCipher).where(MessageCipher.id == id_message))
+    query = await db.execute(select(Cipher).where(Cipher.id == id_message))
     db_message = query.scalars().first()
     if db_message is None or id_message != current_id:
         raise HTTPException(status_code=404, detail='Сообщение не найдено, или не хватает прав доступа')
@@ -53,7 +54,7 @@ async def decrypt_cipher(url: str, pass_phrase: str, db: AsyncSession):
     """
     Расшифровка зашифрованного сообщения и удаление из БД
     """
-    message = await db.execute(select(MessageCipher).where(MessageCipher.cipher_message == url))
+    message = await db.execute(select(Cipher).where(Cipher.cipher_message == url))
     db_message = message.scalars().first()
 
     try:

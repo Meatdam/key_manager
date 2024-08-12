@@ -12,7 +12,7 @@ from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from database.db import get_db
-from users.users_models import User
+from database.db import User
 from users import users_services as crud
 
 load_dotenv()

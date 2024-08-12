@@ -4,7 +4,8 @@ from sqlalchemy.exc import IntegrityError
 from fastapi import HTTPException
 
 
-from users.users_models import User
+from database.db import User
+
 from users.users_schemas import UserUpdateSchema, UserOut, UserCreateSchema
 
 
@@ -12,7 +13,7 @@ async def create_user(user: UserCreateSchema, db: AsyncSession) -> str:
     from authentication.auth_services import hash_password
 
     hashed_password = hash_password(user.password)
-    db_user = User(email=user.email, password=hashed_password)
+    db_user = User(email=user.email, password=hashed_password, )
     db.add(db_user)
     try:
         await db.commit()
@@ -40,6 +41,10 @@ async def update_user(user_id: int, current_id: int, user: UserUpdateSchema, db:
         raise HTTPException(status_code=404, detail='Пользователь не найден или нет прав для изменения')
     if user.password is not None and user.password != db_user.password:
         db_user.password = hash_password(user.password)
+
+    for var, value in vars(user).items():
+        if value is not None:
+            setattr(db_user, var, value)
 
     await db.commit()
     await db.refresh(db_user)

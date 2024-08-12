@@ -6,7 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from authentication.auth_services import get_current_user
 from database.db import get_db
 from cipher.cipher_schemas import CipherMessageSchema, CipherOutput, EncodingSchema, MessageOutSchema
-from users.users_models import User
+from database.db import User
 
 from cipher.cipher_services import create_cipher, get_cipher_by_id, get_cipher_list, decrypt_cipher
 

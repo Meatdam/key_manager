@@ -1,4 +1,5 @@
 from pydantic import BaseModel, EmailStr, Field
+from typing import Optional
 
 
 class UserCreateSchema(BaseModel):
@@ -13,8 +14,8 @@ class UserUpdateSchema(BaseModel):
     """
     Схема для редактирования пользователя
     """
-    email: EmailStr
-    password: str = Field(None, min_length=8)
+    email: Optional[EmailStr] = None
+    password: Optional[str] = Field(None, min_length=8)
 
 
 class UserOut(BaseModel):
