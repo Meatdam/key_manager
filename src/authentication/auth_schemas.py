@@ -3,7 +3,7 @@ from pydantic import BaseModel
 
 class TokenSchema(BaseModel):
     """
-    Модель для описания JWT токенов.
+    Model for describing JWT tokens.
     """
     access_token: str
     refresh_token: str
@@ -12,6 +12,6 @@ class TokenSchema(BaseModel):
 
 class RefreshTokenSchema(BaseModel):
     """
-    Модель для описания JWT токенов для refresh токенов.
+    Model for describing JWT tokens for refresh tokens.
     """
     refresh_token: str
