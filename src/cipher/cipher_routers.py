@@ -43,7 +43,7 @@ async def get_cipher_message(cipher_id: int, db: AsyncSession = Depends(get_db),
 
 
 @router.get(
-    '/',
+    '/ciphers',
     response_model=Page[MessageOutSchema],
     responses=responses()
             )
