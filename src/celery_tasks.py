@@ -1,7 +1,7 @@
 
 from celery import Celery
 
-from settings import CELERY_BROKER_URL, CELERY_BACKEND_URL
+from config import CELERY_BROKER_URL, CELERY_BACKEND_URL
 from tasks.tasks import delete_cipher    # noqa
 
 
