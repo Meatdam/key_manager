@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi_pagination import Page, Params
 
-from src.paginator.responses import ResponseSchema
+from src.base.responses import ResponseSchema
 from src.users import users_services as crud
 
 from src.database.db import get_db
