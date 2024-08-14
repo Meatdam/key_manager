@@ -20,14 +20,14 @@ class UserUpdateSchema(BaseModel):
 
 class UserOut(BaseModel):
     """
-    Модель для вывода пользователей с полями id, email и password.
+    Model for displaying users with id, email and password fields.
     """
     id: int
     email: EmailStr
 
     class Config:
         """
-        Конфигурационный класс для настройки ORM.
-        Позволяет использовать ORM-объекты для сериализации.
+        Configuration class for ORM setup.
+        Allows using ORM objects for serialization.
         """
         orm_mode = True
