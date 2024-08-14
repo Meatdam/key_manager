@@ -3,12 +3,12 @@ from typing import Optional
 from fastapi import HTTPException
 from pydantic import BaseModel, Field
 
-from database.db import LifeCipher
+from src.models.models import LifeCipher
 
 
 class CipherMessageSchema(BaseModel):
     """
-    Схема для зашифрованного сообщения
+    Scheme for encrypted message
     """
     cipher_message: str
     pass_phrase: str
@@ -17,7 +17,7 @@ class CipherMessageSchema(BaseModel):
 
 class EncodingSchema(BaseModel):
     """
-    Схема для зашифрованного сообщения с ключом
+    Scheme for encrypted message with key
     """
     pass_phrase: str
 
@@ -29,7 +29,7 @@ class EncodingSchema(BaseModel):
 
 class CipherOutput(BaseModel):
     """
-    Схема для ответа с зашифрованным сообщением
+    Scheme for replying with encrypted message
     """
     cipher_message: str
     pass_phrase: str
@@ -38,23 +38,25 @@ class CipherOutput(BaseModel):
 
     class Config:
         """
-        Конфигурационный класс для настройки ORM.
-        Позволяет использовать ORM-объекты для сериализации.
+        Configuration class for ORM setup.
+        Allows using ORM objects for serialization.
         """
         orm_mode = True
 
 
 class MessageOutSchema(BaseModel):
     """
-    Схема для ответа с зашифрованным сообщением и полями id, email и password.
+    Schema for a response with an encrypted message and id, email and password fields.
     """
     cipher_message: str
     pass_phrase: str
     key_cipher: str
+    url: str
+    id: int
 
     class Config:
         """
-        Конфигурационный класс для настройки ORM.
-        Позволяет использовать ORM-объекты для сериализации.
+        Configuration class for ORM setup.
+        Allows using ORM objects for serialization.
         """
         orm_mode = True
