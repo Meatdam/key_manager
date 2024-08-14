@@ -9,7 +9,7 @@ from src.models.models import User
 
 
 from src.cipher.cipher_services import create_cipher, get_cipher_by_id, get_cipher_list, decrypt_cipher
-from src.paginator.responses import ResponseSchema
+from src.base.responses import ResponseSchema
 
 router = APIRouter()
 
