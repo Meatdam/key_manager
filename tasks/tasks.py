@@ -4,12 +4,13 @@ from datetime import datetime, timedelta
 from celery import shared_task
 from sqlalchemy import select
 
-from database.db import Cipher, LifeCipher, async_session_maker
+from src.database.db import async_session_maker
+from src.models.models import LifeCipher, Cipher
 
 
 async def task_to_delete():
     """
-    Задача для удаления зашифрованных кодов с истечением срока
+    Task for removing encrypted codes with expiration date
     """
     async with async_session_maker() as session:
 
@@ -38,7 +39,7 @@ async def task_to_delete():
 @shared_task
 def delete_cipher():
     """
-    Периодическая задача для удаления зашифрованных кодов с истечением срока
+    Periodic task to remove encrypted codes with expiration
     """
     loop = asyncio.get_event_loop()
     loop.run_until_complete(task_to_delete())
