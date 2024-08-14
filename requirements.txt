@@ -17,3 +17,6 @@ flake8
 alembic
 celery
 redis
+pytest-asyncio
+httpx
+fastapi-pagination
