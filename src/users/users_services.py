@@ -1,16 +1,23 @@
+from fastapi_pagination.ext.sqlalchemy import paginate
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
+from fastapi_pagination import Page, Params
 from sqlalchemy.exc import IntegrityError
 from fastapi import HTTPException
 
+from src.models.models import User
 
-from database.db import User
-
-from users.users_schemas import UserUpdateSchema, UserOut, UserCreateSchema
+from src.users.users_schemas import UserUpdateSchema, UserOut, UserCreateSchema
 
 
 async def create_user(user: UserCreateSchema, db: AsyncSession) -> str:
-    from authentication.auth_services import hash_password
+    """
+    Creates a new user in the database.
+
+    :param user: an object containing data about the new user (of type UserCreate)
+    :param db: an instance of the database session (of type AsyncSession)
+    """
+    from src.authentication.auth_services import hash_password
 
     hashed_password = hash_password(user.password)
     db_user = User(email=user.email, password=hashed_password, )
@@ -26,14 +33,14 @@ async def create_user(user: UserCreateSchema, db: AsyncSession) -> str:
 
 async def update_user(user_id: int, current_id: int, user: UserUpdateSchema, db: AsyncSession) -> UserOut:
     """
-    Обновляет информации о пользователе.
+    Updates user information.
 
-    :param user_id: Идентификатор пользователя (типа int)
-    :param user: объект, содержащий данные о пользователе для обновления (типа UserUpdate)
-    :param db: экземпляр сессии базы данных (типа AsyncSession)
-    :return: обновленный пользователь (типа UserOut)
+    :param user_id: User ID (of type int)
+    :param user: object containing user data to update (of type UserUpdate)
+    :param db: database session instance (of type AsyncSession)
+    :return: updated user (of type UserOut)
     """
-    from authentication.auth_services import hash_password
+    from src.authentication.auth_services import hash_password
     query = await db.execute(select(User).where(User.id == user_id))
     db_user = query.scalars().first()
 
@@ -53,10 +60,11 @@ async def update_user(user_id: int, current_id: int, user: UserUpdateSchema, db:
 
 async def get_user_id(user_id: int, db: AsyncSession) -> UserOut:
     """
-    Получает данные о пользователе по его идентификатору.
-    :param user_id: Идентификатор пользователя (типа int)
-    :param db: экземпляр сессии базы данных (типа AsyncSession)
-    :return: данные о пользователе (типа UserOut)
+    Gets user data by user ID.
+
+    :param user_id: User ID (of type int)
+    :param db: database session instance (of type AsyncSession)
+    :return: user data (of type UserOut)
     """
     query = await db.execute(select(User).where(User.id == user_id))
     db_user = query.scalars().first()
@@ -65,24 +73,25 @@ async def get_user_id(user_id: int, db: AsyncSession) -> UserOut:
     return db_user
 
 
-async def get_all_users(db: AsyncSession) -> list[UserOut]:
+async def get_all_users(db: AsyncSession, params: Params = Params()) -> Page[UserOut]:
     """
-    Получает всех пользователей из БД.
+    Gets all users from the DB.
 
-    :param db: Экземпляр сессии базы данных (типа AsyncSession)
-    :return: список всех пользователей (типа list[UserOut])
+    :param db: Database session instance (of type AsyncSession)
+    :return: list of all users (of type list[UserOut])
     """
-    user_list = await db.execute(select(User))
-    return user_list.scalars().all()
+    query = select(User)
+
+    return await paginate(db, query, params)
 
 
 async def get_user_by_email(email: str, db: AsyncSession) -> User:
     """
-    Получает пользователя по email.
+    Gets a user by email.
 
-    :param email: Email пользователя
-    :param db: экземпляр сессии базы данных (типа AsyncSession)
-    :return: пользователь с указанным email (типа User)
+    :param email: User's email
+    :param db: database session instance (of type AsyncSession)
+    :return: user with the specified email (of type User)
     """
     email = await db.execute(select(User).filter(User.email == email))
     db_user = email.scalars().first()
@@ -93,11 +102,11 @@ async def get_user_by_email(email: str, db: AsyncSession) -> User:
 
 async def delete_user(user_id: int, curent_id: int,  db: AsyncSession) -> UserOut:
     """
-    Удаляет пользователя по идентификатору.
+    Deletes a user by ID.
 
-    :param user_id: Идентификатор пользователя (тип int)
-    :param db: экземпляр сессии базы данных (тип AsyncSession)
-    :return: удаленный пользователь (тип UserOut)
+    :param user_id: User ID (type int)
+    :param db: database session instance (type AsyncSession)
+    :return: deleted user (type UserOut)
     """
     query = await db.execute(select(User).where(User.id == user_id))
     db_user = query.scalars().first()
