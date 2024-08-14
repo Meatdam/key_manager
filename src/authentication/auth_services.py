@@ -11,9 +11,10 @@ from fastapi.security import OAuth2PasswordBearer
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from database.db import get_db
-from database.db import User
-from users import users_services as crud
+from src.database.db import get_db
+from src.models.models import User
+
+from src.users import users_services as crud
 
 load_dotenv()
 
@@ -23,7 +24,10 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl='token')
 
 def create_access_token(data: dict, expires_delta: timedelta = None) -> str:
     """
-    Создает JWT токен с указанными данными и временем жизни.
+    Creates JWT access token for specified data and optional expiration time.
+    :param data:
+    :param expires_delta:
+    :return:
     """
     try:
         to_encode = data.copy()
@@ -40,7 +44,7 @@ def create_access_token(data: dict, expires_delta: timedelta = None) -> str:
 
 def create_refresh_token(data: dict, expires_delta: timedelta = None) -> str:
     """
-    Создает JWT токен для refresh с указанными данными и временем жизни.
+    Create a refresh token for the given data and optional expiration time.
     """
     try:
         to_encode = data.copy()
@@ -57,7 +61,7 @@ def create_refresh_token(data: dict, expires_delta: timedelta = None) -> str:
 
 def verify_password(plain_password, hashed_password) -> bool:
     """
-    Верифицирует пароль с зашифрованным паролем.
+    Verify password against hashed password.
     """
     pwd_context = CryptContext(schemes=['bcrypt'], deprecated='auto')
     return pwd_context.verify(plain_password, hashed_password)
@@ -65,7 +69,7 @@ def verify_password(plain_password, hashed_password) -> bool:
 
 async def authenticate_user(get_user: Callable, email: str, password: str, db: AsyncSession) -> Union[User, bool]:
     """
-    Аутентификация пользователя по предоставленным электронной почте и паролю.
+    User authentication method for authenticating
     """
     user = await get_user(email, db)
     if not user:
@@ -77,8 +81,7 @@ async def authenticate_user(get_user: Callable, email: str, password: str, db: A
 
 async def get_current_user(token: str = Depends(oauth2_scheme), db: AsyncSession = Depends(get_db)) -> User:
     """
-    Получает текущего пользователя на основе предоставленного JWT токена.
-
+    Uses OAuth2PasswordBearer to authenticate a user.
     """
     exception = HTTPException(
         status_code=401,
@@ -100,8 +103,7 @@ async def get_current_user(token: str = Depends(oauth2_scheme), db: AsyncSession
 
 async def get_user(email: str, db: AsyncSession) -> User:
     """
-    Получает пользователя по электронной почте.
-
+    User object returned from the database by email.
     """
     query = await db.execute(select(User).filter(User.email == email))
     user = query.scalars().first()
@@ -110,7 +112,7 @@ async def get_user(email: str, db: AsyncSession) -> User:
 
 async def validate_token(db: AsyncSession, token: str = Depends(oauth2_scheme)):
     """
-    Валидатор JWT токен и возвращает текущего пользователя.
+    Validates the JWT token and returns the user object.
     """
     user = await get_current_user(db, token=token)
     return user
@@ -118,7 +120,7 @@ async def validate_token(db: AsyncSession, token: str = Depends(oauth2_scheme)):
 
 def hash_password(password: str) -> str:
     """
-    Хеширует пароль с использованием алгоритма bcrypt.
+    Hashes a password using bcrypt.
     """
     pwd_context = CryptContext(schemes=['bcrypt'], deprecated='auto')
     return pwd_context.hash(password)
