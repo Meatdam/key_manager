@@ -41,7 +41,7 @@ async def login_for_access_token(form_data: UserCreateSchema, db: AsyncSession =
     }
 
 
-@router.post('/refresh_token', response_model=TokenSchema)
+@router.post('/token/refresh', response_model=TokenSchema)
 async def refresh_token(form_data: RefreshTokenSchema, db: AsyncSession = Depends(get_db)):
     """
     Refreshes the JWT token using the refresh token.

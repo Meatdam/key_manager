@@ -18,7 +18,7 @@ responses = ResponseSchema()
 
 
 @router.post(
-    '/users/',
+    '/create/',
     response_model=UserOut,
     responses=responses()
 )
@@ -34,7 +34,7 @@ async def add_user(user: UserCreateSchema, db: AsyncSession = Depends(get_db)):
 
 
 @router.put(
-    '/users/{user_id}',
+    '/update/{user_id}',
     response_model=UserOut,
     responses=responses()
 )
@@ -47,7 +47,7 @@ async def update_user(user_id: int, user: UserUpdateSchema, db: AsyncSession = D
 
 
 @router.get(
-    '/users/{user_id}',
+    '/{user_id}',
     response_model=UserOut,
     responses=responses()
 )
@@ -60,7 +60,7 @@ async def get_user_id(user_id: int, db: AsyncSession = Depends(get_db),
 
 
 @router.get(
-    '/users/email/{email}',
+    '/email/{email}',
     response_model=UserOut,
     responses=responses()
 )
@@ -73,7 +73,7 @@ async def user_by_email(email: str, db: AsyncSession = Depends(get_db),
 
 
 @router.get(
-    '/users/',
+    '/users',
     response_model=Page[UserOut],
     responses=responses(),
 )
@@ -88,7 +88,7 @@ async def get_all_users(db: AsyncSession = Depends(get_db),
 
 
 @router.delete(
-    '/users/{user_id}',
+    '/delete/{user_id}',
     response_model=UserOut,
     responses=responses()
 )
