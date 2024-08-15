@@ -114,7 +114,7 @@ async def validate_token(db: AsyncSession, token: str = Depends(oauth2_scheme)):
     """
     Validates the JWT token and returns the user object.
     """
-    user = await get_current_user(db, token=token)
+    user = await get_current_user(token, db)
     return user
 
 
