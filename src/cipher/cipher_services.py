@@ -24,7 +24,7 @@ async def create_cipher(message: CipherMessageSchema, user_id: int, db: AsyncSes
     cipher_phrase = fernet.encrypt(pass_phrase.encode())
 
     load_data = Cipher(key_cipher=str(key), cipher_message=str(cipher_message), pass_phrase=str(cipher_phrase),
-                       user_id=user_id, url=f"http://127.0.0.1:8000/secrets/{cipher_message}",
+                       user_id=user_id, url=f"http://127.0.0.1:8000/api/cipher/secrets/{cipher_message}",
                        life_cipher=message.life_cipher)
     db.add(load_data)
     await db.commit()
@@ -37,8 +37,6 @@ async def get_cipher_list(current_id: int, db: AsyncSession,
     """
     Get list of encrypted messages
     """
-    # query = await db.execute(select(Cipher).where(Cipher.user_id == current_id))
-    # db_message = query.scalars().all()
     query = select(Cipher).where(Cipher.user_id == current_id)
 
     return await paginate(db, query, params)
