@@ -20,3 +20,5 @@ redis
 pytest-asyncio
 httpx
 fastapi-pagination
+asgi_lifespan
+asyncpg
