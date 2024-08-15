@@ -52,16 +52,23 @@ pip install -r requirements.txt
 ```
 4. Создать базу данных в ```PgAdmin```, либо через терминал. Необходимо дать название в файле settings.py в каталоге 'base' в константе (словаре) 'DATABASES'
 5. Заполнить своими данными файл .env в корне вашего проекта. Образец файла лежит в корне .env.example
-6. Для запуска проекта использовать команду
+6. Для применение миграция выполните команды
+```
+alembic revision --autogenerate -m "Database creation
+```
+```
+alembic upgrade head
+```
+7. Для запуска проекта использовать команду
 ```
 uvicorn src.main:app --reload
 ```
 иля запустить проект с файла `main.py`
-7. Для запуска celery beat используйте команду
+8. Для запуска celery beat используйте команду
 ```
  celery -A src.celery_tasks beat -l INFO
 ```
-8. Для запуска celery work используйте команду
+9. Для запуска celery work используйте команду
 ```
 celery -A src.celery_tasks worker -l INFO
 ```
