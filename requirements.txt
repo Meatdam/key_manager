@@ -22,3 +22,4 @@ httpx
 fastapi-pagination
 asgi_lifespan
 asyncpg
+pytest-cov
