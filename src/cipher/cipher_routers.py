@@ -57,8 +57,8 @@ async def get_key_list(db: AsyncSession = Depends(get_db),
     return await get_cipher_list(current_user.id, db, params)
 
 
-@router.get('/secrets/{secret_key}',
-            responses=responses())
+@router.post('/secrets/{secret_key}',
+             responses=responses())
 async def decrypt_cipher_message(secret_key: str, form_data: EncodingSchema, db: AsyncSession = Depends(get_db)):
     """
     Decrypt encrypted message
