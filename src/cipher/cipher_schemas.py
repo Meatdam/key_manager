@@ -8,7 +8,7 @@ from src.models.models import LifeCipher
 
 class CipherMessageSchema(BaseModel):
     """
-    Scheme for encrypted message
+    Scheme for encrypted message.
     """
     cipher_message: str
     pass_phrase: str
@@ -17,7 +17,7 @@ class CipherMessageSchema(BaseModel):
 
 class EncodingSchema(BaseModel):
     """
-    Scheme for encrypted message with key
+    Scheme for encrypted message with key.
     """
     pass_phrase: str
 
@@ -29,7 +29,7 @@ class EncodingSchema(BaseModel):
 
 class CipherOutput(BaseModel):
     """
-    Scheme for replying with encrypted message
+    Scheme for replying with encrypted message.
     """
     cipher_message: str
     pass_phrase: str

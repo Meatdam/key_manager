@@ -69,7 +69,7 @@ def verify_password(plain_password, hashed_password) -> bool:
 
 async def authenticate_user(get_user: Callable, email: str, password: str, db: AsyncSession) -> Union[User, bool]:
     """
-    User authentication method for authenticating
+    User authentication method for authenticating.
     """
     user = await get_user(email, db)
     if not user:

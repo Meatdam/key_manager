@@ -10,7 +10,7 @@ async def test_add_user(async_client: AsyncClient):
     """
     Tests creating a new user.
 
-    :param async_client: asynchronous client for making HTTP requests
+    :param async_client: asynchronous client for making HTTP requests.
     :return:
     """
     user_data = {'email': 'test_email@example.com', 'password': 'password'}
@@ -22,8 +22,8 @@ async def test_add_user(async_client: AsyncClient):
 
 async def test_add_user_duplicate_email_error(async_client: AsyncClient):
     """
-    Tests creating a user with the same email
-    :param async_client: asynchronous client for making HTTP requests
+    Tests creating a user with the same email.
+    :param async_client: asynchronous client for making HTTP requests.
     :return:
     """
     user_data = {'email': 'test_email@example.com', 'password': 'password'}
@@ -38,8 +38,8 @@ async def test_get_user(async_client: AsyncClient, test_user: User):
     """
     Tests getting a user by their id.
 
-    :param async_client: asynchronous client for making HTTP requests
-    :param test_user: test user
+    :param async_client: asynchronous client for making HTTP requests.
+    :param test_user: test user.
     :return:
     """
     response = await async_client.get(f'/api/user/{test_user.id}',
@@ -51,8 +51,8 @@ async def test_get_users(async_client: AsyncClient, test_user: User):
     """
     Tests getting a list of users.
 
-    :param async_client: asynchronous client for making HTTP requests
-    :param test_user: test user
+    :param async_client: asynchronous client for making HTTP requests.
+    :param test_user: test user.
     :return:
     """
     response = await async_client.get('/api/user/users', headers=create_test_auth_headers_for_user(test_user.email),
@@ -64,8 +64,8 @@ async def test_update_user(async_client: AsyncClient, test_user: User):
     """
     Tests user change.
 
-    :param async_client: asynchronous client for making HTTP requests
-    :param test_user: test user
+    :param async_client: asynchronous client for making HTTP requests.
+    :param test_user: test user.
     :return:
     """
     user_data_updated = {'email': test_user.email, 'password': '333099393'}
@@ -79,8 +79,8 @@ async def test_delete_user(async_client: AsyncClient, test_user: User):
     """
     Tests deleting a user.
 
-    :param async_client: asynchronous client for making HTTP requests
-    :param test_user: test user
+    :param async_client: asynchronous client for making HTTP requests.
+    :param test_user: test user.
     :return:
     """
     response = await async_client.delete(f'/api/user/delete/{test_user.id}',

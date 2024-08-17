@@ -8,8 +8,8 @@ async def test_login_user(async_client: AsyncClient, test_user: User):
     """
     Tests authorization of a new user.
 
-    :param async_client: asynchronous client for making HTTP requests
-    :param test_user: test user
+    :param async_client: asynchronous client for making HTTP requests.
+    :param test_user: test user.
     """
     user_data = {'email': 'test_email@example.com', 'password': '11111111'}
     response = await async_client.post('/api/user/create/', json=user_data)
@@ -22,8 +22,8 @@ async def test_login_user(async_client: AsyncClient, test_user: User):
 async def test_refresh_token(async_client: AsyncClient, test_user: User):
     """
     Tests user authorization using a refresh token.
-    :param async_client: asynchronous client for making HTTP requests
-    :param test_user: test user
+    :param async_client: asynchronous client for making HTTP requests.
+    :param test_user: test user.
     """
     user_data = {'email': 'test_email@example.com', 'password': '11111111'}
     response = await async_client.post('/api/user/create/', json=user_data)

@@ -9,8 +9,8 @@ async def test_generate_cipher(async_client: AsyncClient, test_user: User):
     """
     Tests creating a new secret.
 
-    :param async_client: asynchronous client for making HTTP requests
-    :param test_user: test user
+    :param async_client: asynchronous client for making HTTP requests.
+    :param test_user: test user.
     :return:
     """
     secret_data = {'life_cipher': '1 час', 'cipher_message': 'cipher_message', 'pass_phrase': 'passphrase'}
@@ -26,8 +26,8 @@ async def test_get_secret(async_client: AsyncClient, test_user: User):
     """
     Tests getting a secret by its key.
 
-    :param async_client: asynchronous client for making HTTP requests
-    :param test_user: test user
+    :param async_client: asynchronous client for making HTTP requests.
+    :param test_user: test user.
     :return:
     """
     secret_data = {'life_cipher': '1 час', 'cipher_message': 'cipher_message', 'pass_phrase': 'passphrase'}

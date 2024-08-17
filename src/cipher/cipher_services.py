@@ -16,7 +16,7 @@ fernet = Fernet(key)
 
 async def create_cipher(message: CipherMessageSchema, user_id: int, db: AsyncSession):
     """
-    Create a new encrypted message and save it to the database
+    Create a new encrypted message and save it to the database.
     """
     messages = message.cipher_message
     cipher_message = fernet.encrypt(messages.encode())
@@ -35,7 +35,7 @@ async def create_cipher(message: CipherMessageSchema, user_id: int, db: AsyncSes
 async def get_cipher_list(current_id: int, db: AsyncSession,
                           params: Params = Params()):
     """
-    Get list of encrypted messages
+    Get list of encrypted messages.
     """
     query = select(Cipher).where(Cipher.user_id == current_id)
 
@@ -44,7 +44,7 @@ async def get_cipher_list(current_id: int, db: AsyncSession,
 
 async def get_cipher_by_id(id_message: int, current_id: int, db: AsyncSession) -> Cipher:
     """
-    Get encrypted message by its id
+    Get encrypted message by its id.
     """
     query = await db.execute(select(Cipher).where(Cipher.id == id_message))
     db_message = query.scalars().first()
@@ -55,7 +55,7 @@ async def get_cipher_by_id(id_message: int, current_id: int, db: AsyncSession) -
 
 async def decrypt_cipher(url: str, pass_phrase: str, db: AsyncSession):
     """
-    Decrypting an encrypted message and deleting it from the database
+    Decrypting an encrypted message and deleting it from the database.
     """
     message = await db.execute(select(Cipher).where(Cipher.cipher_message == url))
     db_message = message.scalars().first()

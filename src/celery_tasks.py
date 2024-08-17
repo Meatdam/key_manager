@@ -7,7 +7,7 @@ from tasks.tasks import delete_cipher    # noqa
 
 def launch_celery():
     """
-    Старт приложения Celery с настройками RabbitMQ и задачей
+    Starting a Celery application with RabbitMQ settings and a task.
     """
     celery = Celery(broker=CELERY_BROKER_URL, backend=CELERY_BACKEND_URL)
     celery.autodiscover_tasks(['tasks'])
