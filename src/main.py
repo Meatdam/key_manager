@@ -27,6 +27,5 @@ app.include_router(user_routers.router, prefix='/api/user', tags=['User'])
 app.include_router(cipher_routers.router, prefix='/api/cipher', tags=['Cipher'])
 app.include_router(auth_routers.router, prefix='/api/auth', tags=['Auth'])
 
-
 if __name__ == '__main__':
     uvicorn.run('main:app', host='127.0.0.1', port=8000, reload=True)

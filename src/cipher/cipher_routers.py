@@ -24,7 +24,7 @@ responses = ResponseSchema()
 async def create_cipher_message(message: CipherMessageSchema,  db: AsyncSession = Depends(get_db),
                                 current_user: User = Depends(get_current_user)):
     """
-    Create a new encrypted message and save it to the DB
+    Create a new encrypted message and save it to the DB.
     """
     return await create_cipher(message, current_user.id, db)
 
@@ -37,7 +37,7 @@ async def create_cipher_message(message: CipherMessageSchema,  db: AsyncSession 
 async def get_cipher_message(cipher_id: int, db: AsyncSession = Depends(get_db),
                              current_user: User = Depends(get_current_user)):
     """
-    Get encrypted message by its id
+    Get encrypted message by its id.
     """
     return await get_cipher_by_id(cipher_id, current_user.id, db)
 
@@ -51,7 +51,7 @@ async def get_key_list(db: AsyncSession = Depends(get_db),
                        current_user: User = Depends(get_current_user),
                        page: int = Query(1, gt=0), size: int = Query(50, gt=0)):
     """
-    Get list of encrypted messages
+    Get list of encrypted messages.
     """
     params = Params(page=page, size=size)
     return await get_cipher_list(current_user.id, db, params)
@@ -61,7 +61,7 @@ async def get_key_list(db: AsyncSession = Depends(get_db),
              responses=responses())
 async def decrypt_cipher_message(secret_key: str, form_data: EncodingSchema, db: AsyncSession = Depends(get_db)):
     """
-    Decrypt encrypted message
+    Decrypt encrypted message.
     """
     decrypted_message = await decrypt_cipher(secret_key, form_data.pass_phrase, db)
     return {'status': 'ok', 'Ваше сообщение': decrypted_message}
